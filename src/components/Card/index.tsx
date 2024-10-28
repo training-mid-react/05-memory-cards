@@ -1,14 +1,14 @@
-import { FC, MouseEventHandler, ReactElement, useState } from "react"
+import { FC, MouseEventHandler, ReactElement } from "react"
 import { FaQuestion } from "react-icons/fa6"
 import './style.scss'
 
-interface Props {
+interface CardProps {
   icon: ReactElement,
   onClick: MouseEventHandler<HTMLElement>,
   isFlipped: boolean
 }
 
-export const Card: FC<Props> = ({ icon, onClick, isFlipped }) => {
+export const Card: FC<CardProps> = ({ icon, onClick, isFlipped }) => {
   const innerClass = isFlipped ? 'card__inner card__inner--flipped' : 'card__inner'
 
   return (
