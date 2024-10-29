@@ -1,9 +1,8 @@
-import { FaJava } from 'react-icons/fa6'
-import './App.css'
-import { IoLogoJavascript } from 'react-icons/io'
-import { TbBrandCSharp } from 'react-icons/tb'
-import { Card } from './components/Card'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react';
+import { Card } from './components/Card/Card';
+import './App.css';
+import { INITIAL_CARDS } from './constants/constants';
+import { CARD } from './types/types';
 
 enum Turns {
   one = 'uno',
@@ -12,97 +11,63 @@ enum Turns {
 
 function App() {
   const [currentTurn, setCurrentTurn] = useState<Turns>(Turns.one);
-  const [scores, setScores] = useState({
-    [Turns.one]: 0,
-    [Turns.two]: 0
-  })
-
-  const countRef = useRef(1)
-  const timeRef = useRef(0)
-
-  const [cards, setCards] = useState([
-    {
-      id: 1,
-      icon: <FaJava size={50} />,
-      flipped: false,
-      assert: false
-    },
-    {
-      id: 2,
-      icon: <IoLogoJavascript size={50} />,
-      flipped: false,
-      assert: false
-    },
-    {
-      id: 3,
-      icon: <IoLogoJavascript size={50} />,
-      flipped: false,
-      assert: false
-    },
-    {
-      id: 4,
-      icon: <TbBrandCSharp size={50} />,
-      flipped: false,
-      assert: false
-    },
-    {
-      id: 5,
-      icon: <FaJava size={50} />,
-      flipped: false,
-      assert: false
-    },
-    {
-      id: 6,
-      icon: <TbBrandCSharp size={50} />,
-      flipped: false,
-      assert: false
-    }
-  ])
+  const [scores, setScores] = useState({ [Turns.one]: 0, [Turns.two]: 0 });
+  const [cards, setCards] = useState(INITIAL_CARDS);
+  const countRef = useRef(1);
+  const timeRef = useRef<number | null>(null);
 
   const chooseCard = (cardId: number) => {
-    
-    const newCards = cards.map(card => {
-      if (card.id === cardId) {
-        return { ...card, flipped: !card.flipped }
-      }
-      
-      return card
-    })
-    
-    setCards(newCards)
-    
-    if (countRef.current % 2 === 0) {
-      const flippedCards = newCards.filter(card => card.flipped && !card.assert)
-      console.log(flippedCards)
+    const newCards = toggleCard(cards, cardId);
+    setCards(newCards);
 
-      if (flippedCards[0].icon.type.name === flippedCards[1].icon.type.name) {
-        setCards(newCards.map(card => {
-          if (card.id === flippedCards[0].id || card.id === flippedCards[1].id) {
-            return { ...card, assert: true }
-          }
-          
-          return card
-        }))
-        setScores(prevScores => ({ ...prevScores, [currentTurn]: prevScores[currentTurn] + 1 }))
-      } else {
-        timeRef.current = setTimeout(() => setCurrentTurn(prev => prev === Turns.one ? Turns.two : Turns.one), 1500)
+    if (countRef.current % 2 === 0) {
+      const flippedCards = newCards.filter(card => card.flipped && !card.matched);
+
+      if (flippedCards.length === 2) {
+        handleCardMatch(flippedCards);
       }
     }
+    countRef.current += 1;
+  };
 
-    countRef.current += 1
-  }
+  const toggleCard = (cards: CARD[], cardId: number) => {
+    return cards.map(card =>
+      card.id === cardId ? { ...card, flipped: !card.flipped } : card
+    );
+  };
+
+  const handleCardMatch = (flippedCards: CARD[]) => {
+    const [firstCard, secondCard] = flippedCards;
+
+    if (firstCard.icon.component === secondCard.icon.component) {
+      markAsMatched(firstCard, secondCard);
+    } else {
+      setTimeout(() => resetFlippedCards(), 1500);
+    }
+  };
+
+  const markAsMatched = (firstCard: CARD, secondCard: CARD) => {
+    setCards(prevCards => prevCards.map(card =>
+      card.id === firstCard.id || card.id === secondCard.id ? { ...card, matched: true } : card
+    ));
+    setScores(prevScores => ({ ...prevScores, [currentTurn]: prevScores[currentTurn] + 1 }));
+  };
+
+  const resetFlippedCards = () => {
+    setCards(prevCards => prevCards.map(card =>
+      card.flipped && !card.matched ? { ...card, flipped: false } : card
+    ));
+    setCurrentTurn(prev => (prev === Turns.one ? Turns.two : Turns.one));
+  };
+
 
   useEffect(() => {
-    setCards(cards.map(card => {
-      if (!card.assert) {
-        return {...card, flipped: false}
+    return () => {
+      if (timeRef.current) {
+        clearTimeout(timeRef.current);
       }
-
-      return card
-    }))
-
-    return () => clearInterval(timeRef.current)
-  }, [currentTurn])
+    };
+  }, [currentTurn]);
 
   return (
     <>
@@ -112,10 +77,17 @@ function App() {
       </div>
       <h1>Turno: Jugador {currentTurn}</h1>
       <section className='cards'>
-        {cards.map(card => <Card key={card.id} icon={card.icon} isFlipped={card.flipped} onClick={() => chooseCard(card.id)} />)}
+        {cards.map(card => (
+          <Card
+            key={card.id}
+            icon={<card.icon.component size={card.icon.size} />}
+            isFlipped={card.flipped}
+            onClick={() => chooseCard(card.id)}
+          />
+        ))}
       </section>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
