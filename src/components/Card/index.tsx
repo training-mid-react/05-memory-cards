@@ -1,15 +1,17 @@
-import { FC, MouseEventHandler, ReactElement, useState } from "react"
-import { FaQuestion } from "react-icons/fa6"
-import './style.scss'
+import { FC, MouseEventHandler, ReactElement } from "react";
+import { FaQuestion } from "react-icons/fa6";
+import "./style.scss";
 
 interface Props {
-  icon: ReactElement,
-  onClick: MouseEventHandler<HTMLElement>,
-  isFlipped: boolean
+  icon: ReactElement;
+  onClick: MouseEventHandler<HTMLElement>;
+  isFlipped: boolean;
 }
 
 export const Card: FC<Props> = ({ icon, onClick, isFlipped }) => {
-  const innerClass = isFlipped ? 'card__inner card__inner--flipped' : 'card__inner'
+  const innerClass = isFlipped
+    ? "card__inner card__inner--flipped"
+    : "card__inner";
 
   return (
     <article className="card" onClick={onClick}>
@@ -17,10 +19,8 @@ export const Card: FC<Props> = ({ icon, onClick, isFlipped }) => {
         <div className="card__front">
           <FaQuestion size={50} />
         </div>
-        <div className="card__back">
-          {icon}
-        </div>
+        <div className="card__back">{icon}</div>
       </div>
     </article>
-  )
-}
+  );
+};
