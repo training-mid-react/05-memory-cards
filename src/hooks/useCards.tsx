@@ -6,6 +6,7 @@ import { CardsData } from "../data/initialData";
 
 export const useCards = (): CardsHookType => {
 
+    const [cards, setCards] = useState(CardsData)
     const [currentTurn, setCurrentTurn] = useState<Turns>(Turns.one);
     const [scores, setScores] = useState({
         [Turns.one]: 0,
@@ -14,8 +15,6 @@ export const useCards = (): CardsHookType => {
 
     const countRef = useRef(1)
     const timeRef = useRef(0)
-
-    const [cards, setCards] = useState(CardsData)
 
     const chooseCard = (cardId: number) => {
 

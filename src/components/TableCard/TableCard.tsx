@@ -25,7 +25,8 @@ export const TableCard = () => {
                             isFlipped={card.flipped}
                             onClick={() => chooseCard(card.id)}
                         />
-                    ))}
+                    ))
+                }
             </section>
         </div>
     )
