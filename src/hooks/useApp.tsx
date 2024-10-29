@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { cardInit } from "../constants/constants";
-import { Turns } from "../types/interfaces";
+import { Card, Turns } from "../types/interfaces";
 
 export const useApp = () => {
     const [currentTurn, setCurrentTurn] = useState<Turns>(Turns.one);
@@ -12,7 +12,7 @@ export const useApp = () => {
     const countRef = useRef(1)
     const timeRef = useRef(0)
 
-    const [cards, setCards] = useState(cardInit)
+    const [cards, setCards] = useState<Card[]>(cardInit)
 
     const chooseCard = (cardId: number) => {
         
