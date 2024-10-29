@@ -3,6 +3,7 @@
   height: 150px;
   perspective: 1000px; /* Da profundidad para el efecto 3D */
   cursor: pointer;
+  padding: 2em;
 
   &__inner {
     position: relative;
