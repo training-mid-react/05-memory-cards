@@ -8,7 +8,7 @@ const useCards = () => {
   const [cards, setCards] = useState<Card[]>(shuffleArray(initialCards));
 
   const resetCards = () => {
-    setCards(initialCards);
+    setCards(shuffleArray(initialCards));
   };
 
   return { cards, setCards, resetCards };
