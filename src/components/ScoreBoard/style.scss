@@ -1,0 +1,12 @@
+.scoreboard {
+  display: flex;
+  flex-direction: column;
+
+  &__players {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    gap: 40px;
+  }
+}

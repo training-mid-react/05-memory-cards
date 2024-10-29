@@ -1,9 +1,9 @@
-import { FC, MouseEventHandler, ReactElement, useState } from "react"
+import { FC, MouseEventHandler } from "react"
 import { FaQuestion } from "react-icons/fa6"
 import './style.scss'
 
 interface Props {
-  icon: ReactElement,
+  icon: JSX.Element,
   onClick: MouseEventHandler<HTMLElement>,
   isFlipped: boolean
 }
