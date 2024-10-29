@@ -1,0 +1,10 @@
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.app__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

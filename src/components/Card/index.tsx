@@ -1,6 +1,6 @@
-import { FC, MouseEventHandler, ReactElement, useState } from "react"
+import { FC, MouseEventHandler, ReactElement } from "react"
 import { FaQuestion } from "react-icons/fa6"
-import './style.scss'
+import './styles/index.scss'
 
 interface Props {
   icon: ReactElement,
@@ -9,6 +9,7 @@ interface Props {
 }
 
 export const Card: FC<Props> = ({ icon, onClick, isFlipped }) => {
+  
   const innerClass = isFlipped ? 'card__inner card__inner--flipped' : 'card__inner'
 
   return (
